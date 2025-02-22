@@ -90,6 +90,17 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    redirect: async ({ url, baseUrl }) => {
+      // Redirect to the home page after successful login
+      if (url.startsWith(baseUrl)) {
+        return Promise.resolve(baseUrl);
+      }
+      // Allow relative URLs
+      if (url.startsWith("/")) {
+        return Promise.resolve(`${baseUrl}${url}`);
+      }
+      return Promise.resolve(baseUrl);
+    },
   },
 };
 

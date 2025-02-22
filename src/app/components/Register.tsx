@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { signIn, useSession } from "next-auth/react";
@@ -9,14 +9,8 @@ import { useRouter } from "next/navigation";
 const Register = () => {
 
   const router = useRouter()
-
+  const [loading, setLoading] = useState(false);
   const session = useSession();
-
-  // useEffect(() => {
-  //   if (session.status !== "authenticated") {
-  //     router.push("/");
-  //   }
-  // }, [session.status, router]);
 
   const formik: any = useFormik({
     initialValues: {
@@ -38,7 +32,7 @@ const Register = () => {
         .required("Confirm Password is required"),
     }),
     onSubmit: async (values: any) => {
-
+      setLoading(true)
       try {
 
         const params = {
@@ -55,6 +49,9 @@ const Register = () => {
           body: JSON.stringify(params),
         });
 
+        console.log('res: ', res);
+        console.log('res.status: ', res.status);
+
         if (res.status === 201) {
           signIn("credentials", params);
           router.push("/");
@@ -68,6 +65,8 @@ const Register = () => {
         }
       } catch (err: any) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
 
     },
@@ -138,8 +137,9 @@ const Register = () => {
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+            disabled={loading}
           >
-            Register
+            {loading ? "Loading..." : "Register"}
           </button>
         </form>
         <div className="mt-4 text-center">

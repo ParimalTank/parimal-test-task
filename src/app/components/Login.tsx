@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { signIn, useSession } from "next-auth/react";
@@ -10,6 +10,7 @@ const Login = () => {
 
   const session = useSession();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
   //   if (session.status !== "authenticated") {
@@ -33,7 +34,7 @@ const Login = () => {
         .required("Password is required"),
     }),
     onSubmit: async (values: any) => {
-
+      setLoading(true);
       try {
         const result = await signIn("credentials", {
           redirect: false,
@@ -44,8 +45,12 @@ const Login = () => {
         if (result?.error) {
           toast.error(result.error);
         }
+
+        router.push("/");
       } catch (error: any) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -86,8 +91,9 @@ const Login = () => {
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+            disabled={loading}
           >
-            Login
+            {loading ? "Loading..." : "Login"}
           </button>
         </form>
         <div className="mt-4 text-center">
