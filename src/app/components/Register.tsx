@@ -12,11 +12,11 @@ const Register = () => {
 
   const session = useSession();
 
-  useEffect(() => {
-    if (session.status !== "authenticated") {
-      router.push("/");
-    }
-  }, [session.status, router]);
+  // useEffect(() => {
+  //   if (session.status !== "authenticated") {
+  //     router.push("/");
+  //   }
+  // }, [session.status, router]);
 
   const formik: any = useFormik({
     initialValues: {

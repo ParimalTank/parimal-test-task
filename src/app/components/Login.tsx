@@ -11,11 +11,13 @@ const Login = () => {
   const session = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (session.status !== "authenticated") {
-      router.push("/");
-    }
-  }, [session.status, router]); // Add dependencies to useEffect
+  // useEffect(() => {
+  //   if (session.status !== "authenticated") {
+  //     router.push("/");
+  //   }
+  // }, [session.status, router]);
+
+  // Add dependencies to useEffect
 
   const formik: any = useFormik({
     initialValues: {
