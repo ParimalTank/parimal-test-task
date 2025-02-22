@@ -39,7 +39,7 @@ const Login = () => {
       try {
         const result = await signIn("credentials", {
           redirect: false,
-          email: values.email,
+          email: values.email.toLowerCase(),
           password: values.password,
         });
 
